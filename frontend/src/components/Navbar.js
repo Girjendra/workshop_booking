@@ -1,23 +1,82 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-  return (
-    <nav style={{
-      display: "flex",
-      justifyContent: "space-between",
-      padding: "15px",
-      backgroundColor: "#0f172a",
-      color: "white"
-    }}>
-      <h2>FOSSEE</h2>
+  const navigate = useNavigate();
+  const user = localStorage.getItem("user");
 
-      <div style={{ display: "flex", gap: "20px" }}>
-        <Link to="/" style={{ color: "white", textDecoration: "none" }}>Home</Link>
-        <Link to="/login" style={{ color: "white", textDecoration: "none" }}>Login</Link>
-        <Link to="/register" style={{ color: "white", textDecoration: "none" }}>Register</Link>
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
+  return (
+    <div style={styles.navbar}>
+      <h2 style={styles.logo}>FOSSEE</h2>
+
+      <div style={styles.links}>
+        <div
+          style={styles.link}
+          onClick={() => {
+            if (user) navigate("/dashboard");
+            else navigate("/");
+          }}
+        >
+          Home
+        </div>
+
+        {!user ? (
+          <>
+            <div style={styles.link} onClick={() => navigate("/login")}>
+              Login
+            </div>
+            <div style={styles.link} onClick={() => navigate("/register")}>
+              Register
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              style={styles.link}
+              onClick={() => {
+                navigate("/profile");
+              }}
+            >
+              👤 {user}
+            </div>
+
+            <div style={styles.link} onClick={handleLogout}>
+              Logout
+            </div>
+          </>
+        )}
       </div>
-    </nav>
+    </div>
   );
 }
+
+const styles = {
+  navbar: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "15px 40px",
+    backgroundColor: "#0f172a",
+    color: "white",
+  },
+
+  links: {
+    display: "flex",
+    gap: "25px",
+  },
+
+  link: {
+    cursor: "pointer",
+    fontSize: "16px",
+  },
+
+  logo: {
+    cursor: "pointer",
+  },
+};
 
 export default Navbar;
