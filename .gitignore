@@ -45,3 +45,9 @@ db.sqlite3
 #images/gif
 *.png
 *.gif
+
+venv/
+node_modules/
+__pycache__/
+*.pyc
+*.sqlite3
