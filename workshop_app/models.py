@@ -137,6 +137,7 @@ class WorkshopType(models.Model):
 
     name = models.CharField(max_length=120)
     description = models.TextField()
+
     duration = models.PositiveIntegerField(
         help_text='Please enter duration in days',
         validators=[MinValueValidator(1)]
@@ -145,7 +146,6 @@ class WorkshopType(models.Model):
 
     def __str__(self):
         return f"{self.name} for {self.duration} day(s)"
-
 
 class AttachmentFile(models.Model):
     attachments = models.FileField(
@@ -195,16 +195,23 @@ class Workshop(models.Model):
         User, null=True, related_name="%(app_label)s_%(class)s_related",
         on_delete=models.CASCADE
     )
+
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    price = models.FloatField(default=0)
+
     workshop_type = models.ForeignKey(
         WorkshopType, on_delete=models.CASCADE,
         help_text='Select the type of workshop.'
     )
+
     date = models.DateField()
     STATUS_CHOICES = [(0, 'Pending'),
                       (1, 'Accepted'),
                       (2, 'Deleted')]
 
     status = models.IntegerField(choices=STATUS_CHOICES, default=0)
+
     tnc_accepted = models.BooleanField(
         help_text="I accept the terms and conditions"
     )
