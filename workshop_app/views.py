@@ -500,3 +500,143 @@ def view_own_profile(request):
 
     return render(request, "workshop_app/view_profile.html",
                   {"profile": profile, "Workshops": None, "form": form})
+
+
+
+from django.http import JsonResponse
+from .models import Workshop
+
+def get_workshops(request):
+    workshops = list(Workshop.objects.values())
+    return JsonResponse(workshops, safe=False)
+
+
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+import json
+
+def register_api(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            username = data.get("username")
+            email = data.get("email")
+            password = data.get("password")
+
+            # check if user exists
+            if User.objects.filter(username=username).exists():
+                return JsonResponse({"error": "User already exists"}, status=400)
+
+            # create user
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+
+            return JsonResponse({"message": "User registered successfully"})
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)   
+
+import json
+from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+@csrf_exempt
+def login_api(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        username = data.get("username")
+        password = data.get("password")
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            return JsonResponse({"message": "Login successful"})
+        else:
+            return JsonResponse({"error": "Invalid credentials"}, status=401)
+        
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+from django.contrib.auth.models import User
+from .models import Profile
+
+@csrf_exempt
+def update_profile_api(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            username = data.get("username")
+
+            user = User.objects.get(username=username)
+            profile, created = Profile.objects.get_or_create(user=user)
+
+            # user fields
+            user.first_name = data.get("first_name", "")
+            user.last_name = data.get("last_name", "")
+            user.save()
+
+            # profile fields
+            profile.phone_number = data.get("phone", "")
+            profile.institute = data.get("institute", "")
+            profile.department = data.get("department", "")
+            profile.location = data.get("location", "")
+            profile.save()
+
+            return JsonResponse({"message": "Profile updated successfully"})
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Workshop
+from .serializers import WorkshopSerializer
+
+@api_view(['GET'])
+def get_workshops(request):
+    category = request.GET.get('category')
+    price_type = request.GET.get('price')
+
+    workshops = Workshop.objects.all()
+
+    # 🔹 Filter by category
+    if category:
+        workshops = workshops.filter(workshop_type__name=category)
+
+    # 🔹 Filter by price
+    if price_type:
+        if price_type == "free":
+            workshops = workshops.filter(price=0)
+        elif price_type == "paid":
+            workshops = workshops.filter(price__gt=0)
+
+    serializer = WorkshopSerializer(workshops, many=True)
+    return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def get_workshop_detail(request, id):
+    try:
+        workshop = Workshop.objects.get(id=id)
+    except Workshop.DoesNotExist:
+        return Response({"error": "Not found"}, status=404)
+
+    serializer = WorkshopSerializer(workshop)
+    return Response(serializer.data)
