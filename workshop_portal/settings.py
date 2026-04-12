@@ -50,9 +50,12 @@ INSTALLED_APPS = [
     'statistics_app',
     'teams',
     'cms',
+    "corsheaders",
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -134,7 +137,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = 'workshop_app/static/'
 
-LOGIN_URL = '/workshop/login/'
+# LOGIN_URL = '/workshop/login/'
 
 MEDIA_URL = '/data/'
 
@@ -164,7 +167,8 @@ SHOW_WORKSHOP_STATS = True
 # Create a CMS page as a home page and give the page title here
 HOME_PAGE_TITLE = "home-page-title"
 
-LOGIN_REDIRECT_URL = '/workshop/login'
+# LOGIN_REDIRECT_URL = '/workshop/login'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_AGE = 3600
+CORS_ALLOW_ALL_ORIGINS = True

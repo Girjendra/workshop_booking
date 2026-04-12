@@ -2,6 +2,8 @@ import pandas as pd
 
 from django.contrib import admin
 from django.http import HttpResponse
+from django.contrib import admin
+from .models import Workshop
 
 from .models import (
     Profile, WorkshopType,
