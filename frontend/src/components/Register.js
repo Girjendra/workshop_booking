@@ -1,14 +1,10 @@
 import { useState } from "react";
 
 function Register() {
-  const [step, setStep] = useState(1);
-
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
-    phone: "",
-    institute: ""
   });
 
   const [errors, setErrors] = useState({});
@@ -17,201 +13,102 @@ function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleNext = () => {
-    let newErrors = {};
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/register/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
 
-    if (!form.username) {
-      newErrors.username = "Username is required";
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Registration Successful 🚀");
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error");
     }
-
-    if (!form.email) {
-      newErrors.email = "Email is required";
-    } else if (!form.email.includes("@")) {
-      newErrors.email = "Invalid email";
-    }
-
-    if (!form.password) {
-      newErrors.password = "Password is required";
-    } else if (form.password.length < 6) {
-      newErrors.password = "Minimum 6 characters required";
-    }
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      setStep(2);
-    }
-  };
-
-  const handleSubmit = () => {
-    if (!form.phone || !form.institute) {
-      alert("Please fill all fields");
-      return;
-    }
-
-    alert("Registration Successful 🚀");
   };
 
   return (
-    <>
-    <div style={styles.stepContainer}>
-      <div style={step === 1 ? styles.activeStep : styles.step}>1</div>
-      <div style={styles.line}></div>
-      <div style={step === 2 ? styles.activeStep : styles.step}>2</div>
-    </div>
-
     <div style={styles.container}>
       <div style={styles.card}>
         <h2 style={styles.title}>Create Account</h2>
 
-        {step === 1 && (
-          <div style={styles.formSection}>
-            <div style={styles.inputGroup}>
-              <input
-                name="username"
-                value={form.username}
-                onChange={handleChange}
-                style={{
-                  ...styles.input,
-                  border: errors.username ? "1px solid red" : "1px solid #ccc"
-                }}
-              />
-              <label
-                style={
-                  form.username
-                  ? {...styles.label, top: "-8px", fontSize: "12px", color: "#0f172a"}
+        <div style={styles.formSection}>
+
+          {/* Username */}
+          <div style={styles.inputGroup}>
+            <input
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              style={styles.input}
+            />
+            <label
+              style={
+                form.username
+                  ? { ...styles.label, top: "-8px", fontSize: "12px", color: "#0f172a" }
                   : styles.label
-                }
-              >
+              }
+            >
               Username
-              </label>
-            </div>
-
-            {errors.username && (
-              <p style={{ color: "red", fontSize: "12px" }}>
-                {errors.username}
-              </p>
-            )}
-
-            <div style={styles.inputGroup}>
-              <input
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                style={{
-                  ...styles.input,
-                  border: errors.email ? "1px solid red" : "1px solid #ccc"
-                }}
-              />
-              <label
-                style={
-                  form.email
-                    ? { ...styles.label, top: "-8px", fontSize: "12px", color: "#0f172a" }
-                    : styles.label
-                }
-              >
-                Email
-              </label>
-            </div>
-
-            {errors.email && (
-              <p style={{ color: "red", fontSize: "12px" }}>
-                {errors.email}
-              </p>
-            )}
-
-            <div style={styles.inputGroup}>
-              <input
-                name="password"
-                type="password"
-                value={form.password}
-                onChange={handleChange}
-                style={{
-                  ...styles.input,
-                  border: errors.password ? "1px solid red" : "1px solid #ccc"
-                }}
-              />
-              <label
-                style={
-                  form.password
-                    ? { ...styles.label, top: "-8px", fontSize: "12px", color: "#0f172a" }
-                    : styles.label
-                }
-              >
-                Password
-              </label>
-            </div>
-
-            {errors.password && (
-              <p style={{ color: "red", fontSize: "12px" }}>
-                {errors.password}
-              </p>
-            )}
-
-            <button style={styles.button} onClick={handleNext}> Next → </button>
+            </label>
           </div>
-        )}
 
-
-        {step === 2 && (
-          <div>
-            <div style={styles.inputGroup}>
-              <input
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                style={{
-                  ...styles.input,
-                  border: errors.phone ? "1px solid red" : "#ccc"
-                }}
-              />
-              <label
-                style={
-                  form.phone
-                    ? { ...styles.label, top: "-8px", fontSize: "12px" }
-                    : styles.label
-                }
-              >
-                Phone Number
-              </label>
-            </div>
-            {errors.phone && <p style={{ color: "red", fontSize: "12px" }}>{errors.phone}</p>}
-
-
-            <div style={styles.inputGroup}>
-              <input
-                name="institute"
-                value={form.institute}
-                onChange={handleChange}
-                style={{
-                  ...styles.input,
-                  border: errors.institute ? "1px solid red" : "#ccc"
-                }}
-              />
-              <label
-                style={
-                  form.institute
-                    ? { ...styles.label, top: "-8px", fontSize: "12px" }
-                    : styles.label
-                }
-              >
-                Institute Name
-              </label>
-            </div>
-            {errors.institute && <p style={{ color: "red", fontSize: "12px" }}>{errors.institute}</p>}
-
-            <button style={styles.button} onClick={handleSubmit}>
-              Register
-            </button>
-
-            <p style={styles.back} onClick={() => setStep(1)}>
-              ← Back
-            </p>
+          {/* Email */}
+          <div style={styles.inputGroup}>
+            <input
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              style={styles.input}
+            />
+            <label
+              style={
+                form.email
+                  ? { ...styles.label, top: "-8px", fontSize: "12px", color: "#0f172a" }
+                  : styles.label
+              }
+            >
+              Email
+            </label>                    
           </div>
-        )}
+
+          {/* Password */}
+          <div style={styles.inputGroup}>
+            <input
+              name="password"
+              type="password"
+              value={form.password}
+              onChange={handleChange}
+              style={styles.input}
+            />
+            <label
+              style={
+                form.password
+                  ? { ...styles.label, top: "-8px", fontSize: "12px", color: "#0f172a" }
+                  : styles.label
+              }
+            >
+              Password
+            </label>  
+          </div>
+
+          {/* ✅ REGISTER BUTTON */}
+          <button style={styles.button} onClick={handleSubmit}>
+            Register
+          </button>
+
+        </div>
       </div>
     </div>
-  </>
   );
 }
 
@@ -227,83 +124,33 @@ const styles = {
   card: {
     backgroundColor: "white",
     padding: "30px",
-    borderRadius: "10px",
+    borderRadius: "12px",
     width: "350px",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
+    boxShadow: "0 6px 20px rgba(0,0,0,0.1)"
   },
 
   title: {
     textAlign: "center",
-    marginBottom: "20px"
+    marginBottom: "25px"
+  },
+
+  formSection: {
+    display: "flex",
+    flexDirection: "column",
+  },
+
+  inputGroup: {
+    position: "relative",
+    marginBottom: "22px",
   },
 
   input: {
     width: "100%",
-    padding: "14px 10px",
-    borderRadius: "5px",
+    padding: "14px 12px",
+    borderRadius: "6px",
     border: "1px solid #ccc",
     outline: "none",
-  },
-
-  button: {
-    width: "100%",
-    padding: "10px",
-    backgroundColor: "#0f172a",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer"
-  },
-
-  back: {
-    marginTop: "10px",
-    textAlign: "center",
-    cursor: "pointer",
-    color: "#2563eb"
-  },
-
-  stepContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: "20px",
-  },
-
-  step: {
-    width: "30px",
-    height: "30px",
-    borderRadius: "50%",
-    backgroundColor: "#ccc",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-  },
-
-  activeStep: {
-    width: "30px",
-    height: "30px",
-    borderRadius: "50%",
-    backgroundColor: "#0f172a",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-  },
-
-  line: {
-    width: "40px",
-    height: "3px",
-    backgroundColor: "#ccc",
-  },
-
-  formSection: {
-    transition: "all 0.3s ease",
-  },
-  
-  inputGroup: {
-    position: "relative",
-    marginBottom: "20px",
+    fontSize: "14px",
   },
 
   label: {
@@ -319,21 +166,25 @@ const styles = {
     pointerEvents: "none",
   },
 
+  button: {
+    width: "100%",
+    padding: "12px",
+    backgroundColor: "#0f172a",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    marginTop: "10px",
+    fontSize: "15px",
+    fontWeight: "500",
+  },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  back: {
+    marginTop: "12px",
+    textAlign: "center",
+    cursor: "pointer",
+    color: "#2563eb"
+  },
 };
 
 export default Register;
