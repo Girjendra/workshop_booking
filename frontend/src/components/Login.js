@@ -57,8 +57,22 @@ function Login() {
           Login
         </button>
 
-        <p style={styles.link}>Forgot Password?</p>
-        <p style={styles.link}>Don't have an account? Register</p>
+        <p
+          style={{ cursor: "pointer", color: "blue" }}
+          onClick={() => navigate("/reset-password")}
+          onMouseEnter={(e) => e.target.style.textDecoration = "underline"}
+          onMouseLeave={(e) => e.target.style.textDecoration = "none"}
+        >
+          Forgot Password?
+        </p>
+        <p
+          style={{ cursor: "pointer", color: "blue", marginTop: "10px" }}
+          onClick={() => navigate("/register")}
+          onMouseEnter={(e) => e.target.style.textDecoration = "underline"}
+          onMouseLeave={(e) => e.target.style.textDecoration = "none"}
+        >
+          Don't have an account? Register
+        </p>
       </div>
     </div>
   );
