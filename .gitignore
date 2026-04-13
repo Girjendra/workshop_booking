@@ -43,7 +43,6 @@ db.sqlite3
 *.swp
 
 #images/gif
-*.png
 *.gif
 
 venv/

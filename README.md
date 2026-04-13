@@ -1,4 +1,5 @@
 # 🚀 Workshop Booking UI/UX Enhancement
+Live Demo: Run locally using the setup instructions below
 
 This project focuses on improving the UI/UX of an existing workshop booking system using **React.js** and **Django REST Framework**.
 
@@ -32,6 +33,16 @@ The objective was to redesign the interface to make it more:
 - Added workshop approval system (admin-only control)  
 - Ensured consistent UI design across all pages  
 - Optimized API handling for smoother performance  
+
+---
+
+## 🚀 My Approach
+
+- Focused on improving usability rather than adding unnecessary features  
+- Designed a clean and consistent UI to reduce user confusion  
+- Implemented role-based control to clearly separate admin and user actions  
+- Improved navigation flow to make the system intuitive  
+- Ensured smooth API communication between frontend and backend  
 
 ---
 
@@ -107,41 +118,51 @@ The objective was to redesign the interface to make it more:
 
 ### 🔹 Backend
 
+```bash
 cd workshop_booking
 pip install -r requirements.txt
 python manage.py runserver
+```
 
 ### Frontend
 
+```bash
 cd frontend
 npm install
 npm start
+```
 
 ---
 
 ## 📸 Screenshots
 
-### Dashboard
-![Dashboard](screenshots/dashboard.png)
+### 🔹 Dashboard
+![Dashboard](./screenshots/dashboard.png)
 
-### Status Page
-![Status](screenshots/status.png)
+### 🔹 Status Page
+![Status](./screenshots/status.png)
 
-### Profile Page
-![Profile](screenshots/profile.png)
+### 🔹 Profile Page
+![Profile](./screenshots/profile.png)
 
-### Propose Workshop
-![Propose](screenshots/propose.png)
+### 🔹 Propose Workshop
+![Propose](./screenshots/propose.png)
 
-### Stats
-![stats](screenshots/stats.png)
+### 🔹 Statistics Page
+![Statistics](./screenshots/stats.png)
 
-### About Section
-![About](screenshots/about.png)
+### 🔹 About Section
+![About](./screenshots/about.png)
 
 ---
 
-## Future Improvements
+## 📌 Conclusion
+
+This project successfully improves the usability, structure, and user experience of the original system while keeping the core functionality intact.
+
+---
+
+## 🚀 Future Improvements
 
 - Implement authentication using JWT/session-based login
 - Add charts and analytics for statistics
