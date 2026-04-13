@@ -23,6 +23,7 @@ from django.urls import path, include
 from workshop_app.views import register_api, login_api, get_workshops
 from workshop_app.views import update_profile_api, get_workshop_detail
 from django.contrib import admin
+from workshop_app.views import get_profile
 
 def api_home(request):
     return JsonResponse({"message": "API running"})
@@ -40,12 +41,16 @@ urlpatterns = [
     path('api/profile/update/', update_profile_api),
     path('api/workshops/<int:id>/', get_workshop_detail),
     path('admin/', admin.site.urls),
+    path('api/profile/', get_profile), 
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 from workshop_app.views import update_profile_api
 
 urlpatterns += [
     path('api/profile/update/', update_profile_api),
+]
+
+urlpatterns += [
+    path('', include('workshop_app.urls')),
 ]

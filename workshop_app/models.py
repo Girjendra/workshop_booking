@@ -208,7 +208,7 @@ class Workshop(models.Model):
     date = models.DateField()
     STATUS_CHOICES = [(0, 'Pending'),
                       (1, 'Accepted'),
-                      (2, 'Deleted')]
+                      (2, 'Rejected')]
 
     status = models.IntegerField(choices=STATUS_CHOICES, default=0)
 
