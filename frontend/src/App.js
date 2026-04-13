@@ -7,6 +7,13 @@ import Workshops from "./components/Workshops";
 import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import WorkshopDetails from "./components/WorkshopDetails";
+import ProposeWorkshop from "./components/ProposeWorkshop";
+import Status from "./components/Status";
+import Statistics from "./components/Statistics";
+import About from "./components/About";
+import Contact from "./components/Contact";
+import Terms from "./components/Terms";
+import ResetPassword from "./components/ResetPassword";
 
 function Home() {
   const user = localStorage.getItem("user");
@@ -89,6 +96,13 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/workshop/:id" element={<WorkshopDetails />} />
+        <Route path="/propose" element={<ProposeWorkshop />} />
+        <Route path="/status" element={<Status />} />
+        <Route path="/stats" element={<Statistics />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </Router>
   );

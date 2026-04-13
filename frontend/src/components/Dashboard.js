@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 
 function Dashboard() {
   const [workshops, setWorkshops] = useState([]);
@@ -7,7 +8,8 @@ function Dashboard() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
-
+  const navigate = useNavigate();
+  
   const handleRefresh = () => {
     let result = workshops;
 
@@ -65,7 +67,7 @@ function Dashboard() {
     <div style={{ padding: "30px" }}>
       <h1>📊 Dashboard</h1>
 
-      {/* 🔍 FILTERS */}
+      {/*FILTERS*/}
       <div style={{
         display: "flex",
         alignItems: "center",
@@ -131,7 +133,7 @@ function Dashboard() {
         </button>
       </div>
 
-      {/* 📦 WORKSHOP CARDS */}
+      {/*WORKSHOP CARDS*/}
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
@@ -162,6 +164,23 @@ function Dashboard() {
             <p>{w.description}</p>
             <p><b>Date:</b> {w.date}</p>
             <p><b>Price:</b> ₹ {w.price}</p>
+
+            {/*View Details*/}
+            <button
+              onClick={() => navigate(`/workshop/${w.id}`)}
+              style={{
+                marginTop: "10px",
+                padding: "6px 10px",
+                background: "#2563eb",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer"
+              }}
+            >
+              View Details
+            </button>
+
           </div>
         ))}
 
