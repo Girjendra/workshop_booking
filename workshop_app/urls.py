@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path, re_path
 from workshop_app import views
-from workshop_app.views import get_workshops
+from workshop_app.views import get_workshops, create_workshop, update_workshop_status, workshop_stats, reset_password
 
 app_name = "workshop_app"
 
@@ -72,4 +72,8 @@ urlpatterns = [
 
 urlpatterns += [
     path('api/workshops/', get_workshops),
+    path('api/workshops/create/', create_workshop),
+    path('api/workshops/<int:id>/status/', update_workshop_status),
+    path('api/stats/', workshop_stats),
+    path('api/reset-password/', reset_password),
 ]
